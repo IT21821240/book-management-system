@@ -1,0 +1,54 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+
+  <!-- Add Book Form -->
+  <h2>Add New Book</h2>
+  <form (ngSubmit)="addBook()">
+    <input [(ngModel)]="newBook.title" name="title" placeholder="Title" required>
+    <input [(ngModel)]="newBook.author" name="author" placeholder="Author" required>
+    <input [(ngModel)]="newBook.isbn" name="isbn" placeholder="ISBN" required>
+    <input [(ngModel)]="newBook.publicationDate" name="pubDate" type="date" required>
+    <button type="submit" class="add-btn">Add Book</button>
+  </form>
+
+  <!-- Book List Table -->
+  <h2>Book List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>ISBN</th>
+        <th>Publication Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <!-- Edit mode -->
+        <ng-container *ngIf="editingBookId === book.id; else viewMode">
+          <td><input [(ngModel)]="editedBook.title" required></td>
+          <td><input [(ngModel)]="editedBook.author" required></td>
+          <td><input [(ngModel)]="editedBook.isbn" required></td>
+          <td><input [(ngModel)]="editedBook.publicationDate" type="date" required></td>
+          <td>
+            <button (click)="saveBook()" class="edit-btn">Save</button>
+            <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+          </td>
+        </ng-container>
+
+        <!-- View mode -->
+        <ng-template #viewMode>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.isbn }}</td>
+          <td>{{ book.publicationDate | date:'yyyy-MM-dd' }}</td>
+          <td>
+            <button (click)="editBook(book)" class="edit-btn">Edit</button>
+            <button (click)="deleteBook(book.id)" class="delete-btn">Delete</button>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+</div>
